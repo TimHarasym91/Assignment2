@@ -12,13 +12,13 @@ import {
   templateUrl: 'home.html'
 })
 export class HomePage {
-  songs: FirebaseListObservable<any>;
+  toDos: FirebaseListObservable<any>;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, af: AngularFire, public actionSheetCtrl: ActionSheetController) {
-    this.songs = af.database.list('/songs');
+    this.toDos = af.database.list('/toDos');
   }
 
-  addSong(){
+  addToDo(){
     let prompt = this.alertCtrl.create({
       title: 'To Do Item',
       message: "Enter a To Do item",
@@ -38,7 +38,7 @@ export class HomePage {
         {
           text: 'Save',
           handler: data => {
-            this.songs.push({
+            this.toDos.push({
               title: data.title,
               status: false
             });
@@ -49,11 +49,12 @@ export class HomePage {
     prompt.present();
   }
 
-  removeSong(songId: string){
-    this.songs.remove(songId);
+  removeToDo(toDoId: string){
+    this.toDos.remove(toDoId);
   }
 
-  updateSong(songId, songTitle){
+//
+  updateToDo(toDoId, toDoTitle){
   let prompt = this.alertCtrl.create({
     title: 'To Do Item',
     message: "Update the name for this To Do Item",
@@ -61,7 +62,7 @@ export class HomePage {
       {
         name: 'title',
         placeholder: 'Title',
-        value: songTitle
+        value: toDoTitle
       },
     ],
     buttons: [
@@ -74,7 +75,7 @@ export class HomePage {
       {
         text: 'Save',
         handler: data => {
-          this.songs.update(songId, {
+          this.toDos.update(toDoId, {
             title: data.title
           });
         }
@@ -84,14 +85,14 @@ export class HomePage {
   prompt.present();
 }
 
-updateStatus(songId, songStatus){
-  if(songStatus == false){
-    this.songs.update(songId,{
+updateStatus(toDoId, toDoStatus){
+  if(toDoStatus == false){
+    this.toDos.update(toDoId,{
       status: true
     });
   }
-  else if(songStatus == true){
-    this.songs.update(songId,{
+  else if(toDoStatus == true){
+    this.toDos.update(toDoId,{
       status: false
     });
   }
